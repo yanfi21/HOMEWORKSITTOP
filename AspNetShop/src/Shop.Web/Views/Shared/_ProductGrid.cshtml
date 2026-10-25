@@ -1,0 +1,28 @@
+@model CatalogViewModel
+@if (Model.Result.Items.Count == 0)
+{
+    <div class="empty-state">
+        <h3>Ничего не найдено</h3>
+        <p>Попробуйте изменить запрос или сбросить фильтры.</p>
+    </div>
+}
+else
+{
+    <p class="catalog-count">Найдено товаров: <strong>@Model.Result.TotalCount</strong></p>
+    <div class="product-grid">
+        @foreach (var product in Model.Result.Items)
+        {
+            <partial name="_ProductCard" model="product" />
+        }
+    </div>
+
+    @if (Model.Result.TotalPages > 1)
+    {
+        <nav class="pagination" aria-label="Страницы каталога">
+            @for (var pg = 1; pg <= Model.Result.TotalPages; pg++)
+            {
+                <button type="button" class="page-btn @(pg == Model.Result.Page ? "active" : "")" data-page="@pg">@pg</button>
+            }
+        </nav>
+    }
+}

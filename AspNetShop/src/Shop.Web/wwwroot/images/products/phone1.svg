@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
+<rect width="800" height="600" fill="url(#g)"/>
+<circle cx="650" cy="110" r="170" fill="rgba(255,255,255,0.14)"/>
+<circle cx="120" cy="520" r="140" fill="rgba(255,255,255,0.10)"/>
+<text x="400" y="300" font-size="170" text-anchor="middle">📱</text>
+<text x="400" y="430" font-size="44" font-family="Segoe UI, Arial" font-weight="700" fill="#ffffff" text-anchor="middle">Смартфон</text>
+<text x="400" y="480" font-size="22" font-family="Segoe UI, Arial" fill="rgba(255,255,255,0.85)" text-anchor="middle">ТехноМаркет</text>
+</svg>

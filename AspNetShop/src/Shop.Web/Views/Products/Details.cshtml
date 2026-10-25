@@ -1,0 +1,44 @@
+@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+<nav class="breadcrumbs">
+    <a asp-controller="Home" asp-action="Index">Главная</a> /
+    <a asp-controller="Products" asp-action="Index">Каталог</a> /
+    @if (Model.Category is not null)
+    {
+        <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@Model.CategoryId">@Model.Category.Name</a>
+        <span>/</span>
+    }
+    <span>@Model.Name</span>
+</nav>
+
+<section class="details card">
+    <div class="details-image">
+        <img src="@Model.ImageUrl" alt="@Model.Name" />
+    </div>
+    <div class="details-info">
+        <p class="product-category">@Model.Category?.Name</p>
+        <h1>@Model.Name</h1>
+        <p class="details-desc">@Model.Description</p>
+        <div class="product-price big">
+            <span class="price-now">@Model.Price.ToString("N0") ₽</span>
+            @if (Model.OldPrice is > 0)
+            {
+                <span class="price-old">@Model.OldPrice.Value.ToString("N0") ₽</span>
+            }
+        </div>
+        <p class="product-stock">@(Model.Stock > 0 ? $"В наличии: {Model.Stock} шт." : "Нет в наличии")</p>
+        <div class="details-buy">
+            <label>Кол-во <input type="number" id="detailsQty" value="1" min="1" max="99" /></label>
+            <button type="button" class="btn btn-large" data-add-to-cart="@Model.Id" data-qty-input="detailsQty" @(Model.Stock <= 0 ? "disabled" : "")>
+                Добавить в корзину
+            </button>
+        </div>
+        <ul class="check-list small">
+            <li>Доставка по городу 1–2 дня</li>
+            <li>Гарантия 12 месяцев</li>
+            <li>Возврат в течение 14 дней</li>
+        </ul>
+    </div>
+</section>

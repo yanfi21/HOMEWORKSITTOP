@@ -1,0 +1,34 @@
+@model ProductListItem
+<article class="product-card">
+    <a class="product-thumb" asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id">
+        <img src="@Model.ImageUrl" alt="@Model.Name" loading="lazy" />
+        @if (Model.OldPrice is > 0)
+        {
+            <span class="badge-sale">Скидка</span>
+        }
+        @if (Model.Stock <= 0)
+        {
+            <span class="badge-out">Нет в наличии</span>
+        }
+    </a>
+    <div class="product-body">
+        <div class="product-category">@Model.CategoryName</div>
+        <h3 class="product-name">
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a>
+        </h3>
+        <div class="product-price">
+            <span class="price-now">@Model.Price.ToString("N0") ₽</span>
+            @if (Model.OldPrice is > 0)
+            {
+                <span class="price-old">@Model.OldPrice.Value.ToString("N0") ₽</span>
+            }
+        </div>
+        <div class="product-stock">@(Model.Stock > 0 ? $"В наличии: {Model.Stock}" : "Под заказ")</div>
+        <div class="product-actions">
+            <button type="button" class="btn" data-add-to-cart="@Model.Id" @(Model.Stock <= 0 ? "disabled" : "")>
+                В корзину
+            </button>
+            <button type="button" class="btn btn-ghost" data-quick-view="@Model.Id">Быстрый просмотр</button>
+        </div>
+    </div>
+</article>

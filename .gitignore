@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+# .NET / ASP.NET Core (AspNetShop)
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+TestResults/
+*.db
+*.db-shm
+*.db-wal
+logs/
+wwwroot/images/uploads/

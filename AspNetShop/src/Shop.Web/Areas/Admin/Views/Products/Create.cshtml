@@ -1,0 +1,10 @@
+@model Product
+@{
+    ViewData["Title"] = "Новый товар";
+}
+<h1>Новый товар</h1>
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="card form-card wide">
+    <partial name="_ProductForm" model="Model" />
+    <button type="submit" class="btn btn-block">Создать</button>
+    <a asp-action="Index">← К списку</a>
+</form>

@@ -1,0 +1,25 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "Профиль";
+}
+<section class="card form-card auth-card">
+    <h1>Мой профиль</h1>
+    <p class="muted">E-mail: <strong>@Model.Email</strong></p>
+    <form asp-action="Profile" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" />
+        <span asp-validation-for="FullName" class="field-error"></span>
+
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" />
+        <span asp-validation-for="Phone" class="field-error"></span>
+
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+        <span asp-validation-for="Address" class="field-error"></span>
+
+        <button type="submit" class="btn btn-block">Сохранить</button>
+    </form>
+    <p><a asp-controller="Orders" asp-action="Index">→ Мои заказы</a></p>
+</section>

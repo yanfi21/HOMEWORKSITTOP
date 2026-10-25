@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Дашборд";
+    var recent = ViewBag.RecentOrders as List<Order> ?? new List<Order>();
+}
+<h1>Дашборд</h1>
+<div class="stats-grid">
+    <div class="stat card"><span>Товаров</span><strong>@ViewBag.ProductsCount</strong></div>
+    <div class="stat card"><span>Категорий</span><strong>@ViewBag.CategoriesCount</strong></div>
+    <div class="stat card"><span>Заказов</span><strong>@ViewBag.OrdersCount</strong></div>
+    <div class="stat card"><span>Новых заказов</span><strong>@ViewBag.NewOrdersCount</strong></div>
+    <div class="stat card"><span>Выручка</span><strong>@(((decimal)ViewBag.Revenue).ToString("N0")) ₽</strong></div>
+</div>
+
+<section class="card">
+    <h2>Последние заказы</h2>
+    @if (recent.Count == 0)
+    {
+        <p class="muted">Заказов пока нет.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead><tr><th>№</th><th>Дата</th><th>Покупатель</th><th>Сумма</th><th>Статус</th></tr></thead>
+            <tbody>
+            @foreach (var order in recent)
+            {
+                <tr>
+                    <td><a asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id">#@order.Id</a></td>
+                    <td>@order.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@order.CustomerName</td>
+                    <td>@order.Total.ToString("N0") ₽</td>
+                    <td>@order.Status</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+</section>

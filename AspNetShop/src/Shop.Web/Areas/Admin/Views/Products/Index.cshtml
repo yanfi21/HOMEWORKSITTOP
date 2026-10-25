@@ -1,0 +1,35 @@
+@model List<Product>
+@{
+    ViewData["Title"] = "Товары";
+}
+<div class="section-head">
+    <h1>Товары</h1>
+    <a class="btn" asp-action="Create">+ Добавить товар</a>
+</div>
+<section class="card">
+    <table class="table">
+        <thead>
+        <tr><th></th><th>Название</th><th>Категория</th><th>Цена</th><th>Остаток</th><th>Активен</th><th>Хит</th><th></th></tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td><img class="admin-thumb" src="@p.ImageUrl" alt="" /></td>
+                <td>@p.Name</td>
+                <td>@p.Category?.Name</td>
+                <td>@p.Price.ToString("N0") ₽</td>
+                <td>@p.Stock</td>
+                <td>@(p.IsActive ? "✓" : "—")</td>
+                <td>@(p.IsFeatured ? "★" : "")</td>
+                <td class="row-actions">
+                    <a asp-action="Edit" asp-route-id="@p.Id">Изменить</a>
+                    <form asp-action="Delete" asp-route-id="@p.Id" method="post" onsubmit="return confirm('Удалить товар?');">
+                        <button type="submit" class="link-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,85 @@
+@inject Shop.Web.Services.ICartService Cart
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="ТехноМаркет — учебный интернет-магазин на ASP.NET Core MVC + AJAX" />
+    <title>@ViewData["Title"] — ТехноМаркет</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @Html.AntiForgeryToken()
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="logo" asp-controller="Home" asp-action="Index">Техно<span>Маркет</span></a>
+            <nav class="main-nav" id="mainNav">
+                <a asp-controller="Home" asp-action="Index">Главная</a>
+                <a asp-controller="Products" asp-action="Index">Каталог</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Orders" asp-action="Index">Мои заказы</a>
+                    <a asp-controller="Account" asp-action="Profile">Профиль</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-admin">Админка</a>
+                    }
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
+                        <button type="submit" class="link-button">Выйти (@User.Identity.Name)</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login">Войти</a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-small">Регистрация</a>
+                }
+            </nav>
+            <div class="header-actions">
+                <a class="cart-link" asp-controller="Cart" asp-action="Index" aria-label="Корзина">
+                    🧺 <span class="cart-badge" id="cartBadge">@Cart.TotalQuantity</span>
+                </a>
+                <button class="burger" id="burgerBtn" aria-label="Меню">☰</button>
+            </div>
+        </div>
+        <div class="container header-search">
+            <div class="search-box">
+                <input type="search" id="globalSearch" placeholder="Поиск товаров… (живой поиск AJAX)" autocomplete="off" />
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        @if (TempData["Toast"] is string toast)
+        {
+            <div class="alert alert-success" data-toast="@toast"></div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>
+                <strong>ТехноМаркет</strong> — экзаменационный проект: ASP.NET Core 8 MVC, EF Core, Identity, AJAX.
+            </div>
+            <div class="footer-links">
+                <a asp-controller="Home" asp-action="Privacy">О проекте и технологиях</a>
+                <a href="/health" target="_blank" rel="noopener">/health</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-backdrop" id="quickViewModal" hidden>
+        <div class="modal">
+            <button class="modal-close" id="quickViewClose" aria-label="Закрыть">×</button>
+            <div id="quickViewContent">Загрузка…</div>
+        </div>
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

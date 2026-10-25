@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "О проекте";
+}
+<section class="card">
+    <h1>О проекте «ТехноМаркет»</h1>
+    <p>Экзаменационный интернет-магазин по дисциплине «ASP.NET и AJAX». Собрана стандартная функциональность магазина с акцентом на принципы ASP.NET Core и скорость.</p>
+    <h2>Что реализовано</h2>
+    <ul class="check-list">
+        <li>Каталог с поиском, фильтрами, сортировкой и пагинацией <strong>без перезагрузки</strong> (AJAX + PartialView / JSON API);</li>
+        <li>Живые подсказки поиска и быстрый просмотр товара (AJAX, fetch API);</li>
+        <li>Корзина в сессии: добавление, изменение количества и удаление через AJAX;</li>
+        <li>Регистрация/вход (ASP.NET Core Identity), профиль, история заказов;</li>
+        <li>Оформление заказа с проверкой остатков и списанием со склада;</li>
+        <li>Админ-панель (Area): дашборд, CRUD товаров и категорий, загрузка картинок, статусы заказов;</li>
+        <li><strong>Логирование</strong>: встроенный ILogger, лог запросов с временем выполнения, запись в <code>logs/app-*.log</code>;</li>
+        <li><strong>Кэширование</strong>: IMemoryCache, OutputCache API, ResponseCaching, долгий кэш статики;</li>
+        <li><strong>Безопасность</strong>: HTTPS/HSTS, Antiforgery в формах и AJAX, CSP и security-заголовки, RateLimiting входа, блокировка после 5 неверных паролей, защита от IDOR и Open Redirect;</li>
+        <li><strong>Скорость</strong>: Brotli/Gzip-сжатие, пул DbContext, AsNoTracking + Select-проекции, индексы БД, серверная пагинация, ленивая загрузка картинок.</li>
+    </ul>
+    <h2>Тестовые аккаунты</h2>
+    <ul>
+        <li>Администратор: <code>admin@shop.local</code> / <code>Admin123!</code></li>
+        <li>Покупатель: <code>user@shop.local</code> / <code>User123!</code></li>
+    </ul>
+</section>

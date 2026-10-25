@@ -1,0 +1,19 @@
+@model OrderStatus
+@switch (Model)
+{
+    case OrderStatus.New:
+        <span class="status status-new">Новый</span>
+        break;
+    case OrderStatus.Processing:
+        <span class="status status-processing">В обработке</span>
+        break;
+    case OrderStatus.Shipped:
+        <span class="status status-shipped">Отправлен</span>
+        break;
+    case OrderStatus.Completed:
+        <span class="status status-done">Выполнен</span>
+        break;
+    case OrderStatus.Cancelled:
+        <span class="status status-cancelled">Отменён</span>
+        break;
+}

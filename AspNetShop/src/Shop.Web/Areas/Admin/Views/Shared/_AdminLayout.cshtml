@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] — Админка ТехноМаркета</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+    @Html.AntiForgeryToken()
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <a class="logo light" asp-area="" asp-controller="Home" asp-action="Index">Техно<span>Маркет</span></a>
+            <p class="admin-caption">Панель управления</p>
+            <nav>
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">📊 Дашборд</a>
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index">📦 Товары</a>
+                <a asp-area="Admin" asp-controller="Categories" asp-action="Index">🗂 Категории</a>
+                <a asp-area="Admin" asp-controller="Orders" asp-action="Index">🧾 Заказы</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index">🏬 На витрину</a>
+            </nav>
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="link-button light">Выйти (@User.Identity?.Name)</button>
+            </form>
+        </aside>
+        <main class="admin-main">
+            @RenderBody()
+        </main>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+    @if (TempData["Toast"] is string toast)
+    {
+        <div data-toast="@toast" hidden></div>
+    }
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
