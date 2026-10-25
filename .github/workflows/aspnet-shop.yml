@@ -32,3 +32,6 @@ jobs:
 
       - name: Test
         run: dotnet test AspNetShop.sln -c Release --no-build --verbosity normal
+
+      - name: Smoke test (run app, check pages + API + /health)
+        run: bash scripts/smoke-test.sh
