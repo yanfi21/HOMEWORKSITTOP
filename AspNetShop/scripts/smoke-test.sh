@@ -32,7 +32,9 @@ done
 check() {
   local path="$1" needle="$2"
   echo "GET $path (expect: $needle)"
-  curl -fs "$URL$path" | grep -q "$needle"
+  # Пишем в файл, а не в pipe: иначе grep -q закрывает поток и curl падает с кодом 23 (SIGPIPE + pipefail).
+  curl -fs "$URL$path" -o /tmp/smoke-page.out
+  grep -q "$needle" /tmp/smoke-page.out
 }
 
 check "/" "Техно"
