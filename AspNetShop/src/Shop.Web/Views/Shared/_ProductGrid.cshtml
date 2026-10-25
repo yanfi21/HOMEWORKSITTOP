@@ -19,9 +19,9 @@ else
     @if (Model.Result.TotalPages > 1)
     {
         <nav class="pagination" aria-label="Страницы каталога">
-            @for (var page = 1; page <= Model.Result.TotalPages; page++)
+            @for (var pg = 1; pg <= Model.Result.TotalPages; pg++)
             {
-                <button type="button" class="page-btn @(page == Model.Result.Page ? "active" : "")" data-page="@page">@page</button>
+                <button type="button" class="page-btn @(pg == Model.Result.Page ? "active" : "")" data-page="@pg">@pg</button>
             }
         </nav>
     }
