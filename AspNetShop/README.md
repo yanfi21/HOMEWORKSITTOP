@@ -94,7 +94,7 @@ dotnet test
 ```
 AspNetShop/
 ├── AspNetShop.sln
-├── README.md                  ← этот файл
+├── README.md   
 ├── src/Shop.Web/
 │   ├── Program.cs             ← DI, middleware, кэш, сжатие, rate limiting
 │   ├── Models/                ← сущности: Product, Category, Order, ApplicationUser, CartItem
