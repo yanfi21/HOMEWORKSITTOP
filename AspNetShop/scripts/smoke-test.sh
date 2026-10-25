@@ -1,40 +1,64 @@
 #!/usr/bin/env bash
 # Smoke-тест: запускает приложение, проверяет ключевые страницы и API, останавливает сервер.
 # Используется в GitHub Actions; можно запускать локально из папки AspNetShop: bash scripts/smoke-test.sh
-set -euo pipefail
+set -uo pipefail
 
 export ASPNETCORE_ENVIRONMENT=Development
 URL="http://127.0.0.1:5080"
 
-dotnet run --project src/Shop.Web -c Release --no-build --urls "$URL" > smoke-app.log 2>&1 &
+dotnet run --project src/Shop.Web -c Release --no-build --no-launch-profile --urls "$URL" > smoke-app.log 2>&1 &
 APP_PID=$!
 trap 'kill $APP_PID 2>/dev/null || true' EXIT
 
+fail_with_log() {
+  echo "SMOKE FAILED: $1"
+  # Печатаем диагностику и в обычный лог, и в аннотации GitHub Actions (видны через API).
+  python3 - <<'PY' || true
+import pathlib
+
+def ann(title, text):
+    enc = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    print(f"::error title={title}::{enc[:3500]}")
+
+for title, path, limit in [("smoke-body", "/tmp/smoke-page.out", 1500), ("smoke-app-log", "smoke-app.log", 4000)]:
+    p = pathlib.Path(path)
+    if p.exists():
+        data = p.read_bytes()[-limit:].decode("utf-8", "replace")
+        ann(title, data)
+PY
+  echo "----- response body (tail) -----"
+  tail -c 1500 /tmp/smoke-page.out 2>/dev/null || true
+  echo "----- app log (tail) -----"
+  tail -n 80 smoke-app.log 2>/dev/null || true
+  exit 1
+}
+
 echo "Waiting for app to start..."
+UP=0
 for i in $(seq 1 40); do
-  if curl -fs "$URL/health" > /dev/null 2>&1; then
+  code=$(curl -s -o /tmp/smoke-page.out -w "%{http_code}" "$URL/health" || echo "000")
+  if [ "$code" = "200" ]; then
     echo "App is up"
+    UP=1
     break
   fi
-  sleep 2
   if ! kill -0 $APP_PID 2>/dev/null; then
-    echo "App exited early. Log:"
-    cat smoke-app.log
-    exit 1
+    fail_with_log "app exited early (health code=$code)"
   fi
-  if [ "$i" -eq 40 ]; then
-    echo "App did not start in time. Log:"
-    cat smoke-app.log
-    exit 1
-  fi
+  sleep 2
 done
+[ "$UP" = "1" ] || fail_with_log "app did not start in time"
 
 check() {
   local path="$1" needle="$2"
-  echo "GET $path (expect: $needle)"
-  # Пишем в файл, а не в pipe: иначе grep -q закрывает поток и curl падает с кодом 23 (SIGPIPE + pipefail).
-  curl -fs "$URL$path" -o /tmp/smoke-page.out
-  grep -q "$needle" /tmp/smoke-page.out
+  echo "GET $path (expect 200 + '$needle')"
+  code=$(curl -s -o /tmp/smoke-page.out -w "%{http_code}" "$URL$path" || echo "000")
+  if [ "$code" != "200" ]; then
+    fail_with_log "GET $path returned HTTP $code"
+  fi
+  if ! grep -q "$needle" /tmp/smoke-page.out; then
+    fail_with_log "GET $path does not contain '$needle'"
+  fi
 }
 
 check "/" "Техно"
