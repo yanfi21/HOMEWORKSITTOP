@@ -1,0 +1,44 @@
+@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Оформление заказа";
+}
+<h1>Оформление заказа</h1>
+
+<div class="checkout-layout">
+    <form asp-action="Index" method="post" class="card form-card">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+        <label asp-for="CustomerName"></label>
+        <input asp-for="CustomerName" />
+        <span asp-validation-for="CustomerName" class="field-error"></span>
+
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" placeholder="+7 900 000-00-00" />
+        <span asp-validation-for="Phone" class="field-error"></span>
+
+        <label asp-for="Address"></label>
+        <input asp-for="Address" placeholder="Город, улица, дом, квартира" />
+        <span asp-validation-for="Address" class="field-error"></span>
+
+        <label asp-for="Comment"></label>
+        <textarea asp-for="Comment" rows="3" placeholder="Необязательно"></textarea>
+        <span asp-validation-for="Comment" class="field-error"></span>
+
+        <button type="submit" class="btn btn-large btn-block">Подтвердить заказ на @Model.Total.ToString("N0") ₽</button>
+    </form>
+
+    <aside class="card">
+        <h3>Ваш заказ</h3>
+        <ul class="checkout-items">
+            @foreach (var item in Model.Items)
+            {
+                <li>
+                    <span>@item.Name × @item.Quantity</span>
+                    <strong>@item.LineTotal.ToString("N0") ₽</strong>
+                </li>
+            }
+        </ul>
+        <hr />
+        <p class="checkout-total">Итого: <strong>@Model.Total.ToString("N0") ₽</strong></p>
+        <p class="muted">Оплата при получении (учебный проект — платёжный шлюз не подключается).</p>
+    </aside>
+</div>

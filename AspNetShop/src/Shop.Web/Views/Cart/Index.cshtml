@@ -1,0 +1,57 @@
+@model IReadOnlyList<CartItem>
+@{
+    ViewData["Title"] = "Корзина";
+}
+<h1>Корзина</h1>
+
+<div id="cartRoot">
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state card">
+            <h3>Корзина пуста</h3>
+            <p>Добавьте товары из каталога — они появятся здесь без перезагрузки страниц.</p>
+            <a class="btn" asp-controller="Products" asp-action="Index">В каталог</a>
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <table class="table cart-table">
+                <thead>
+                <tr><th>Товар</th><th>Цена</th><th>Количество</th><th>Сумма</th><th></th></tr>
+                </thead>
+                <tbody id="cartItems">
+                @foreach (var item in Model)
+                {
+                    <tr data-cart-row="@item.ProductId">
+                        <td>
+                            <div class="cart-product">
+                                <img src="@item.ImageUrl" alt="@item.Name" />
+                                <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId">@item.Name</a>
+                            </div>
+                        </td>
+                        <td>@item.Price.ToString("N0") ₽</td>
+                        <td>
+                            <div class="qty-controls">
+                                <button type="button" data-cart-dec="@item.ProductId">−</button>
+                                <input type="number" min="0" max="99" value="@item.Quantity" data-cart-qty="@item.ProductId" />
+                                <button type="button" data-cart-inc="@item.ProductId">+</button>
+                            </div>
+                        </td>
+                        <td data-cart-line="@item.ProductId">@item.LineTotal.ToString("N0") ₽</td>
+                        <td><button type="button" class="link-danger" data-cart-remove="@item.ProductId">Удалить</button></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <div class="cart-footer">
+                <div>Итого: <strong id="cartTotal">@Model.Sum(i => i.LineTotal).ToString("N0") ₽</strong></div>
+                <a class="btn btn-large" asp-controller="Checkout" asp-action="Index" id="checkoutBtn">Оформить заказ</a>
+            </div>
+            @if (User.Identity?.IsAuthenticated != true)
+            {
+                <p class="muted">Для оформления заказа потребуется вход — корзина при этом сохранится.</p>
+            }
+        </div>
+    }
+</div>

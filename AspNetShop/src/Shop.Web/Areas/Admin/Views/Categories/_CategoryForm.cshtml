@@ -1,0 +1,8 @@
+@model Category
+<div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+<label asp-for="Name"></label>
+<input asp-for="Name" />
+<span asp-validation-for="Name" class="field-error"></span>
+<label asp-for="Description"></label>
+<textarea asp-for="Description" rows="3"></textarea>
+<span asp-validation-for="Description" class="field-error"></span>

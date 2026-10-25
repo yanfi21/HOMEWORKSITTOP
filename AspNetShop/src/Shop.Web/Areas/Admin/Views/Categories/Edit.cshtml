@@ -1,0 +1,11 @@
+@model Category
+@{
+    ViewData["Title"] = "Редактирование категории";
+}
+<h1>Категория №@Model.Id</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="card form-card wide">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_CategoryForm" model="Model" />
+    <button type="submit" class="btn btn-block">Сохранить</button>
+    <a asp-action="Index">← К списку</a>
+</form>

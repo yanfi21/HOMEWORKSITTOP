@@ -1,0 +1,34 @@
+name: ASP.NET Shop (build + tests)
+
+on:
+  push:
+    paths:
+      - 'AspNetShop/**'
+      - '.github/workflows/aspnet-shop.yml'
+  pull_request:
+    paths:
+      - 'AspNetShop/**'
+      - '.github/workflows/aspnet-shop.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: AspNetShop
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore AspNetShop.sln
+
+      - name: Build (Release)
+        run: dotnet build AspNetShop.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test AspNetShop.sln -c Release --no-build --verbosity normal

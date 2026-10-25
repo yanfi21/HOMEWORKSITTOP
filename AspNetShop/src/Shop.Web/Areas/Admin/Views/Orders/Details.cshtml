@@ -1,0 +1,30 @@
+@model Order
+@{
+    ViewData["Title"] = $"Заказ №{Model.Id}";
+}
+<p><a asp-action="Index">← Все заказы</a></p>
+<section class="card">
+    <h1>Заказ №@Model.Id</h1>
+    <p>Дата: @Model.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm") · Статус: <strong>@Model.Status</strong></p>
+    <p>Покупатель: @Model.CustomerName (@Model.User?.Email), телефон: @Model.Phone</p>
+    <p>Адрес доставки: @Model.Address</p>
+    @if (!string.IsNullOrWhiteSpace(Model.Comment))
+    {
+        <p>Комментарий: @Model.Comment</p>
+    }
+    <table class="table">
+        <thead><tr><th>Товар</th><th>Цена</th><th>Кол-во</th><th>Сумма</th></tr></thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.UnitPrice.ToString("N0") ₽</td>
+                <td>@item.Quantity</td>
+                <td>@item.LineTotal.ToString("N0") ₽</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <p class="checkout-total">Итого: <strong>@Model.Total.ToString("N0") ₽</strong></p>
+</section>

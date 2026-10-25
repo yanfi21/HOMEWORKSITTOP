@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Ошибка";
+    var code = ViewBag.StatusCode as int?;
+}
+<section class="card center">
+    <h1>@(code == 404 ? "Страница не найдена (404)" : "Что-то пошло не так")</h1>
+    <p>Запрошенной страницы нет или произошла ошибка. Она уже записана в лог приложения.</p>
+    @if (ViewBag.RequestId is string requestId)
+    {
+        <p class="muted">Request ID: <code>@requestId</code></p>
+    }
+    <a class="btn" asp-controller="Home" asp-action="Index">На главную</a>
+</section>

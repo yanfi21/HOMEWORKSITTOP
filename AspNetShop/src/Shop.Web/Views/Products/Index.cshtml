@@ -1,0 +1,63 @@
+@model CatalogViewModel
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+<div class="page-head">
+    <h1>Каталог</h1>
+    <p class="muted">Фильтры, поиск и страницы работают через AJAX — страница не перезагружается.</p>
+</div>
+
+<div class="catalog-layout">
+    <aside class="filters card">
+        <form id="filterForm">
+            <label>
+                Поиск
+                <input type="search" name="search" id="filterSearch" value="@Model.Query.Search" placeholder="Название товара…" autocomplete="off" />
+            </label>
+            <label>
+                Категория
+                <select name="categoryId" id="filterCategory">
+                    <option value="">Все категории</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        if (Model.Query.CategoryId == category.Id)
+                        {
+                            <option value="@category.Id" selected>@category.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    }
+                </select>
+            </label>
+            <div class="price-row">
+                <label>Цена от <input type="number" name="minPrice" id="filterMin" min="0" value="@Model.Query.MinPrice" placeholder="0" /></label>
+                <label>до <input type="number" name="maxPrice" id="filterMax" min="0" value="@Model.Query.MaxPrice" placeholder="200 000" /></label>
+            </div>
+            <label>
+                Сортировка
+                <select name="sort" id="filterSort">
+                    <option value="new" selected="@(Model.Query.Sort == "new")">Сначала новые</option>
+                    <option value="popular" selected="@(Model.Query.Sort == "popular")">Сначала популярные</option>
+                    <option value="price-asc" selected="@(Model.Query.Sort == "price-asc")">Цена: по возрастанию</option>
+                    <option value="price-desc" selected="@(Model.Query.Sort == "price-desc")">Цена: по убыванию</option>
+                    <option value="name" selected="@(Model.Query.Sort == "name")">По названию</option>
+                </select>
+            </label>
+            <button type="button" class="btn btn-ghost btn-block" id="resetFilters">Сбросить фильтры</button>
+        </form>
+    </aside>
+
+    <section class="catalog-results">
+        <div class="loading-bar" id="catalogLoading" hidden>Загружаем товары…</div>
+        <div id="catalogGrid">
+            <partial name="_ProductGrid" model="Model" />
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/catalog.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Заказ оформлен";
+}
+<section class="card center">
+    <div class="success-icon">✅</div>
+    <h1>Спасибо! Заказ №@ViewBag.OrderId оформлен</h1>
+    <p>Мы свяжемся с вами для подтверждения доставки. Статус заказа можно смотреть в разделе «Мои заказы».</p>
+    <div class="row-gap">
+        <a class="btn" asp-controller="Orders" asp-action="Index">Мои заказы</a>
+        <a class="btn btn-ghost" asp-controller="Products" asp-action="Index">Продолжить покупки</a>
+    </div>
+</section>

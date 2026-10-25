@@ -1,0 +1,29 @@
+@model List<Category>
+@{
+    ViewData["Title"] = "Категории";
+}
+<div class="section-head">
+    <h1>Категории</h1>
+    <a class="btn" asp-action="Create">+ Добавить категорию</a>
+</div>
+<section class="card">
+    <table class="table">
+        <thead><tr><th>Название</th><th>Описание</th><th>Товаров</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td><strong>@c.Name</strong></td>
+                <td>@c.Description</td>
+                <td>@c.Products.Count</td>
+                <td class="row-actions">
+                    <a asp-action="Edit" asp-route-id="@c.Id">Изменить</a>
+                    <form asp-action="Delete" asp-route-id="@c.Id" method="post" onsubmit="return confirm('Удалить категорию?');">
+                        <button type="submit" class="link-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>

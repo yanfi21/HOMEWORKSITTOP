@@ -1,0 +1,47 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<section class="hero">
+    <div class="hero-text">
+        <p class="hero-kicker">ASP.NET Core 8 · EF Core · AJAX</p>
+        <h1>Техника для работы, учёбы и игр</h1>
+        <p>Быстрый каталог без перезагрузки страницы: живой поиск, фильтры, корзина и оформление заказа — всё через AJAX и серверное кэширование.</p>
+        <a class="btn btn-large" asp-controller="Products" asp-action="Index">Перейти в каталог →</a>
+    </div>
+    <div class="hero-perks">
+        <div class="perk"><strong>⚡ Скорость</strong><span>Brotli, OutputCache, IMemoryCache, AsNoTracking</span></div>
+        <div class="perk"><strong>🔒 Безопасность</strong><span>Identity PBKDF2, Antiforgery, CSP, RateLimiting</span></div>
+        <div class="perk"><strong>📝 Логирование</strong><span>Встроенный ILogger + файлы logs/app-*.log</span></div>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="section-head">
+        <h2>Категории</h2>
+        <a asp-controller="Products" asp-action="Index">Все товары →</a>
+    </div>
+    <div class="category-row">
+        @foreach (var category in Model.Categories)
+        {
+            <a class="category-chip" asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.Id">
+                <strong>@category.Name</strong>
+                <span>@category.Description</span>
+            </a>
+        }
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="section-head">
+        <h2>Хиты продаж</h2>
+        <span class="muted">Данные отдаются из IMemoryCache на 5 минут</span>
+    </div>
+    <div class="product-grid">
+        @foreach (var product in Model.Featured)
+        {
+            <partial name="_ProductCard" model="product" />
+        }
+    </div>
+</section>

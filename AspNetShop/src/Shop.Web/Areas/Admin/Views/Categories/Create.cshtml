@@ -1,0 +1,10 @@
+@model Category
+@{
+    ViewData["Title"] = "Новая категория";
+}
+<h1>Новая категория</h1>
+<form asp-action="Create" method="post" class="card form-card wide">
+    <partial name="_CategoryForm" model="Model" />
+    <button type="submit" class="btn btn-block">Создать</button>
+    <a asp-action="Index">← К списку</a>
+</form>
