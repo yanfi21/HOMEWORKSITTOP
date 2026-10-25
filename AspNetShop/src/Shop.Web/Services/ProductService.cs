@@ -70,10 +70,12 @@ public class ProductService : IProductService
             q = q.Where(p => p.Price <= query.MaxPrice.Value);
         }
 
+        // SQLite хранит decimal как TEXT и EF Core не транслирует ORDER BY по decimal,
+        // поэтому сортируем по CAST в REAL: (double)p.Price. Для цен в рублях точности double хватает.
         q = query.Sort switch
         {
-            "price-asc" => q.OrderBy(p => p.Price),
-            "price-desc" => q.OrderByDescending(p => p.Price),
+            "price-asc" => q.OrderBy(p => (double)p.Price),
+            "price-desc" => q.OrderByDescending(p => (double)p.Price),
             "name" => q.OrderBy(p => p.Name),
             "popular" => q.OrderByDescending(p => p.IsFeatured).ThenByDescending(p => p.CreatedAt),
             _ => q.OrderByDescending(p => p.CreatedAt)

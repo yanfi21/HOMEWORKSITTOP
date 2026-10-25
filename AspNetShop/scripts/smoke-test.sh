@@ -20,11 +20,15 @@ def ann(title, text):
     enc = text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
     print(f"::error title={title}::{enc[:3500]}")
 
-for title, path, limit in [("smoke-body", "/tmp/smoke-page.out", 1500), ("smoke-app-log", "smoke-app.log", 4000)]:
-    p = pathlib.Path(path)
-    if p.exists():
-        data = p.read_bytes()[-limit:].decode("utf-8", "replace")
-        ann(title, data)
+body = pathlib.Path("/tmp/smoke-page.out")
+if body.exists():
+    ann("smoke-body", body.read_bytes()[:2000].decode("utf-8", "replace"))
+
+log = pathlib.Path("smoke-app.log")
+if log.exists():
+    lines = log.read_text("utf-8", "replace").splitlines()
+    hits = [l for l in lines if "exception" in l.lower() or "fail:" in l.lower()][:30]
+    ann("smoke-app-log", "\n".join(hits + ["--- tail ---"] + lines[-15:]))
 PY
   echo "----- response body (tail) -----"
   tail -c 1500 /tmp/smoke-page.out 2>/dev/null || true
